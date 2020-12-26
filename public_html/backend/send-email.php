@@ -3,7 +3,7 @@ session_start();
 /******************/
 /* init VARIABLES */
 /******************/
-$settings = yaml_parse_file("../../config.yaml");
+$settings = json_decode(getenv("CONFIG"), true);
 $APP_NAME = $settings["title"];
 $to_email = $settings["email"];
 $CAPTCHA_SECRET = $settings["recaptcha"]["priv"]; /* GET KEYS: https://www.google.com/recaptcha/admin#list */
