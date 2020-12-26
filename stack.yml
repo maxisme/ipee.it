@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  web:
+    image: maxisme/ipee.it:latest
+    deploy:
+      mode: global
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.ipeeit.rule=Host(`ipee.it`)"
+        - "traefik.http.services.ipeeit.loadbalancer.server.port=8080"
+        - "traefik.http.routers.ipeeit.middlewares=404"
+    networks:
+      - traefik
+      - php
+    volumes:
+      - "html:/usr/share/nginx/html/"
+
+  php:
+    image: php:7-fpm
+    env_file:
+      - ".env"
+    networks:
+      - php
+    volumes:
+      - "html:/usr/share/nginx/html/"
+    deploy:
+      mode: global
+
+networks:
+  php:
+  traefik:
+    external: true
+
+volumes:
+  html:

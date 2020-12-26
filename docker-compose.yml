@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  web:
+    build:
+      context: .
+    ports:
+      - 8080:8080
+    links:
+      - php
+    volumes:
+      - "html:/usr/share/nginx/html/"
+  php:
+    env_file:
+      - ".env"
+    image: php:7-fpm
+    volumes:
+      - "html:/usr/share/nginx/html/"
+
+volumes:
+  html:
