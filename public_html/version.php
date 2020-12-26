@@ -1,5 +1,5 @@
 <?php
-$settings = yaml_parse_file("../config.yaml");
+$settings = json_decode(getenv("CONFIG"), true);
 
 $version = $settings["app"]["version"]["num"];
 $description = $settings["app"]["version"]["description"];
