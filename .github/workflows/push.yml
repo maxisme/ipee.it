@@ -6,13 +6,13 @@ on:
       - master
 
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
         with:
           fetch-depth: '0'
-      - name: Publish to Docker Registry
+      - name: Publish web to Docker Registry
         uses: docker/build-push-action@v1
         with:
           repository: ${{ github.repository }}
@@ -20,11 +20,21 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           tag_with_ref: true
           tag_with_sha: true
-  publish:
+          fetch-depth: '0'
+      - name: Publish php to Docker Registry
+        uses: docker/build-push-action@v1
+        with:
+          dockerfile: php.Dockerfile
+          repository: php.${{ github.repository }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          tag_with_ref: true
+          tag_with_sha: true
+  deploy:
     runs-on: ubuntu-latest
-    needs: deploy
+    needs: publish
     steps:
-      - name: Update Swarm
+      - name: Update web
         run: |
           export sha="${{ github.sha }}"
           curl -fs -X POST ${{ secrets.SWARM_HOOK }} \
@@ -32,4 +42,13 @@ jobs:
           -d 'service=ipeeit_web' \
           -d "tag=sha-${sha:0:7}" \
           -d "image=${{ github.repository }}" \
+          -d "token=${{ secrets.HOOK_TOKEN }}"
+      - name: Update php
+        run: |
+          export sha="${{ github.sha }}"
+          curl -fs -X POST ${{ secrets.SWARM_HOOK }} \
+          -H 'Content-Type: application/x-www-form-urlencoded' \
+          -d 'service=ipeeit_php' \
+          -d "tag=sha-${sha:0:7}" \
+          -d "image=php.${{ github.repository }}" \
           -d "token=${{ secrets.HOOK_TOKEN }}"

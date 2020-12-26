@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 services:
   web:
     image: maxisme/ipee.it:latest
@@ -12,17 +12,13 @@ services:
     networks:
       - traefik
       - php
-    volumes:
-      - "html:/usr/share/nginx/html/"
 
   php:
-    image: php:7-fpm
+    image: maxisme/php.ipee.it:latest
     env_file:
       - ".env"
     networks:
       - php
-    volumes:
-      - "html:/usr/share/nginx/html/"
     deploy:
       mode: global
 
@@ -30,6 +26,3 @@ networks:
   php:
   traefik:
     external: true
-
-volumes:
-  html:
