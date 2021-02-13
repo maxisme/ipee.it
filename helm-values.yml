@@ -1,0 +1,8 @@
+ingress:
+  match: "Host(`ipee.it`)"
+
+image:
+  repository: "maxisme/ipee.it"
+  tag: "latest"
+
+envSecretRef: "ipeeit" # kubectl create secret generic *thisval* --from-env-file .env
