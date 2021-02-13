@@ -1,15 +1,9 @@
-version: '3.9'
+version: "3.1"
 services:
-  web:
+  app:
+    env_file:
+      - ".env"
     build:
       context: .
     ports:
       - 8080:8080
-    links:
-      - php
-  php:
-    build:
-      context: .
-      dockerfile: php.Dockerfile
-    env_file:
-      - ".env"
