@@ -1,0 +1,3 @@
+[submodule "themes/app-hugo"]
+	path = themes/app-hugo
+	url = https://github.com/maxisme/app-hugo-theme

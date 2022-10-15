@@ -1,0 +1,4 @@
+baseURL = "https://ipee.it/"
+languageCode = "en-gb"
+title = "iPee"
+theme = "app-hugo"
